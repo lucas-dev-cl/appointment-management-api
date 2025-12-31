@@ -12,4 +12,5 @@ public interface AppointmentCustomRepository {
             String service,
             AppointmentStatus status
     );
+
 }

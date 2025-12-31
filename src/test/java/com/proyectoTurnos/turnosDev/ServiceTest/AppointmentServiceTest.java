@@ -122,26 +122,6 @@ public class AppointmentServiceTest {
         verify(appointmentMapper, never()).toAppointmentDTO(any());
     }
 
-    // Happy path (service): el service obtiene todos los turnos,
-    // los mapea a una lista de DTOs
-    // y devuelve la colección correctamente
-    @Test
-    void getAllAppointments_shouldReturnListDTO(){
-        Appointment appointment = new Appointment();
-        AppointmentDTO appointmentDTO = new AppointmentDTO();
-
-        when(appointmentMapper.appointmentsToDtoListTO(List.of(appointment)))
-                .thenReturn(List.of(appointmentDTO));
-        when(appointmentRepository.findAll())
-                .thenReturn(List.of(appointment));
-
-        List<AppointmentDTO> result = appointmentService.getAllAppointments();
-
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals(appointmentDTO, result.get(0));
-    }
-
     // Happy path (service): cuando el turno existe,
     // el service cambia su estado de SCHEDULED a CANCELLED
     @Test

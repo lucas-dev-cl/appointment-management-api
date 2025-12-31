@@ -26,14 +26,6 @@ public class AppointmentService {
         this.appointmentCustomRepository = appointmentCustomRepository;
     }
 
-    // Obtiene todos los turnos almacenados,
-    // los mapea a DTO y devuelve la lista completa
-    public List<AppointmentDTO> getAllAppointments(){
-        return appointmentMapper.appointmentsToDtoListTO(
-                appointmentRepository.findAll()
-        );
-    }
-
     // Busca un turno por id.
     // Si no existe, lanza AppointmentNotFoundException.
     // Si existe, lo mapea a DTO y lo devuelve
@@ -69,6 +61,10 @@ public class AppointmentService {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppointmentNotFoundException(id));
 
+        if(appointment.getStatus().equals(AppointmentStatus.CANCELLED)){
+            throw new IllegalStateException("El turno ya está cancelado");
+        }
+
         appointment.setStatus(AppointmentStatus.CANCELLED);
         appointmentRepository.save(appointment);
     }
@@ -79,6 +75,10 @@ public class AppointmentService {
     public void completed(String id){
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppointmentNotFoundException(id));
+
+        if(appointment.getStatus().equals(AppointmentStatus.CANCELLED)){
+            throw new IllegalStateException("El turno ya está completado");
+        }
 
         appointment.setStatus(AppointmentStatus.COMPLETED);
         appointmentRepository.save(appointment);

@@ -1,9 +1,6 @@
 package com.proyectoTurnos.turnosDev.RestController;
 
-import com.proyectoTurnos.turnosDev.Exception.ApiError;
-import com.proyectoTurnos.turnosDev.Exception.ApiErrorResponse;
-import com.proyectoTurnos.turnosDev.Exception.AppointmentInPastException;
-import com.proyectoTurnos.turnosDev.Exception.AppointmentNotFoundException;
+import com.proyectoTurnos.turnosDev.Exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,4 +74,23 @@ public class AppointmentRControllerAdvice {
                 .body(new ApiErrorResponse(apiError)
         );
     }
+
+    @ExceptionHandler(AppointmentAlreadyCancelledException.class)
+    public ResponseEntity<ApiErrorResponse> handleStatusError(
+            AppointmentAlreadyCancelledException ex,
+            HttpServletRequest httpServletRequest
+    ){
+        ApiError apiError = new ApiError(
+                400,
+                "Status Error",
+                ex.getMessage(),
+                httpServletRequest.getContextPath(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ApiErrorResponse(apiError));
+    }
+
 }
