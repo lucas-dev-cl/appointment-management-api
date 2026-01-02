@@ -5,6 +5,7 @@ import com.proyectoTurnos.turnosDev.Entity.Appointment;
 import com.proyectoTurnos.turnosDev.Entity.AppointmentStatus;
 import com.proyectoTurnos.turnosDev.Exception.AppointmentInPastException;
 import com.proyectoTurnos.turnosDev.Exception.AppointmentNotFoundException;
+import com.proyectoTurnos.turnosDev.Exception.InvalidAppointmentStatusException;
 import com.proyectoTurnos.turnosDev.Repository.AppointmentCustomRepository;
 import com.proyectoTurnos.turnosDev.Repository.AppointmentRepository;
 import com.proyectoTurnos.turnosDev.Service.Mapper.AppointmentMapper;
@@ -62,7 +63,7 @@ public class AppointmentService {
                 .orElseThrow(() -> new AppointmentNotFoundException(id));
 
         if(appointment.getStatus().equals(AppointmentStatus.CANCELLED)){
-            throw new IllegalStateException("El turno ya está cancelado");
+            throw new InvalidAppointmentStatusException("El turno ya está cancelado");
         }
 
         appointment.setStatus(AppointmentStatus.CANCELLED);
@@ -76,8 +77,8 @@ public class AppointmentService {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppointmentNotFoundException(id));
 
-        if(appointment.getStatus().equals(AppointmentStatus.CANCELLED)){
-            throw new IllegalStateException("El turno ya está completado");
+        if(appointment.getStatus().equals(AppointmentStatus.COMPLETED)){
+            throw new InvalidAppointmentStatusException("El turno ya está completado");
         }
 
         appointment.setStatus(AppointmentStatus.COMPLETED);

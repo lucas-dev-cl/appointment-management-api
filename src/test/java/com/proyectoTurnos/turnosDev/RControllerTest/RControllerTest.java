@@ -1,14 +1,10 @@
 package com.proyectoTurnos.turnosDev.RControllerTest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.proyectoTurnos.turnosDev.DTO.AppointmentDTO;
 import com.proyectoTurnos.turnosDev.Exception.AppointmentNotFoundException;
 import com.proyectoTurnos.turnosDev.RestController.AppointmentRController;
-import com.proyectoTurnos.turnosDev.RestController.AppointmentRControllerAdvice;
 import com.proyectoTurnos.turnosDev.Service.AppointmentService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,7 +19,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 // Test unitario de un endpoint
 @WebMvcTest(AppointmentRController.class)

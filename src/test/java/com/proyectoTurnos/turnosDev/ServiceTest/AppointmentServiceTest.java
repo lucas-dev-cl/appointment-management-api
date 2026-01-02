@@ -4,6 +4,8 @@ import com.proyectoTurnos.turnosDev.DTO.AppointmentDTO;
 import com.proyectoTurnos.turnosDev.Entity.Appointment;
 import com.proyectoTurnos.turnosDev.Entity.AppointmentStatus;
 import com.proyectoTurnos.turnosDev.Exception.AppointmentInPastException;
+import com.proyectoTurnos.turnosDev.Exception.AppointmentNotFoundException;
+import com.proyectoTurnos.turnosDev.Exception.InvalidAppointmentStatusException;
 import com.proyectoTurnos.turnosDev.Repository.AppointmentRepository;
 import com.proyectoTurnos.turnosDev.Service.AppointmentService;
 import com.proyectoTurnos.turnosDev.Service.Mapper.AppointmentMapper;
@@ -114,7 +116,7 @@ public class AppointmentServiceTest {
                 .thenReturn(Optional.empty());
 
         assertThrows(
-                RuntimeException.class,
+                AppointmentNotFoundException.class,
                 () -> appointmentService.getAppointmentById(anyString())
         );
 
@@ -135,5 +137,24 @@ public class AppointmentServiceTest {
         appointmentService.cancel("123");
 
         assertEquals(AppointmentStatus.CANCELLED, appointment.getStatus());
+    }
+
+    // Error path (service): cuando el turno ya esta cancelado
+    // el service lanza una excepcion donde dice que ya esta cancelado el turno
+    @Test
+    void shouldThrowException_whenInvalidAppointmentStatusException(){
+        Appointment appointment = new Appointment();
+        appointment.setStatus(AppointmentStatus.CANCELLED);
+
+        when(appointmentRepository.findById(anyString()))
+                .thenReturn(Optional.of(appointment));
+
+        assertThrows(
+                InvalidAppointmentStatusException.class,
+                () -> appointmentService.cancel("123")
+        );
+
+        verify(appointmentRepository, never()).save(any());
+
     }
 }

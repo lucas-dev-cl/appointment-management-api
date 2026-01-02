@@ -75,9 +75,9 @@ public class AppointmentRControllerAdvice {
         );
     }
 
-    @ExceptionHandler(AppointmentAlreadyCancelledException.class)
+    @ExceptionHandler(InvalidAppointmentStatusException.class)
     public ResponseEntity<ApiErrorResponse> handleStatusError(
-            AppointmentAlreadyCancelledException ex,
+            InvalidAppointmentStatusException ex,
             HttpServletRequest httpServletRequest
     ){
         ApiError apiError = new ApiError(
